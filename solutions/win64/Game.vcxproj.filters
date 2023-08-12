@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Engines\proj\project_ai\Code\StdAfx.cpp" />
+    <ClCompile Include="C:\Engines\proj\project_ai\solutions\win64\Code_uber.cpp">
+      <Filter>UBER FILES</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Engines\proj\project_ai\solutions\win64\Components_uber.cpp">
+      <Filter>UBER FILES</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Engines\proj\project_ai\Code\GamePlugin.cpp" />
+    <ClInclude Include="C:\Engines\proj\project_ai\Code\GamePlugin.h" />
+    <ClInclude Include="C:\Engines\proj\project_ai\Code\StdAfx.h" />
+    <ClInclude Include="C:\Engines\proj\project_ai\Code\Components\Player.cpp">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Engines\proj\project_ai\Code\Components\SpawnPoint.cpp">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Engines\proj\project_ai\Code\Components\Bullet.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Engines\proj\project_ai\Code\Components\Player.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Engines\proj\project_ai\Code\Components\SpawnPoint.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Engines\proj\project_ai\Code\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="C:\Engines\proj\project_ai\solutions\win64\Game.autogen.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Components">
+      <UniqueIdentifier>{FF892F21-37FB-3175-9902-D584B6E98B0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{7E3A7E0C-10C9-3504-B403-425E54103285}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UBER FILES">
+      <UniqueIdentifier>{08577B08-3D65-376F-873C-F534900C805A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,13 @@
+/Editor/**
+/logbackups/*
+/user/shaders/cache/**
+/solutions/win64/.vs/**
+/solutions/win64/x64/Debug/ALL_BUILD/**
+/solutions/win64/x64/Debug/**
+/user/testresults/**
+solutions/win64/CMakeFiles/3.22.1/x64/Debug/**
+solutions/win64/CMakeFiles/3.22.1/CompilerIdCXX/Debug/**
+solutions/win64/CMakeFiles/3.22.1/CompilerIdC/Debug/**
+solutions/win64/Debug/**
+solutions/win64/*.dir
+*.log
