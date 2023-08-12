@@ -5,3 +5,4 @@
 [ShaderList_PC.txt]<2>MobileComposition@TonemappingMobileVS()()(0)(0)(0)(0)(VS)
 [ShaderList_PC.txt]<2>MobileComposition@TonemappingMobilePS()()(0)(0)(0)(0)(PS)
 [ShaderList_PC.txt]<2>PostAA@PostAAComposites_PS()()(0)(0)(0)(0)(PS)
+[ShaderList_PC.txt]<2>WaterFogVolume@OceanOutofPS()(%_RT_FOG|%_RT_SAMPLE0)(0)(0)(0)(0)(PS)

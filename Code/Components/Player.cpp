@@ -57,6 +57,8 @@ void CPlayerComponent::Initialize()
 	m_pEntity->GetNetEntity()->BindToNetwork();
 	m_SpeedMultiplier = 0.7f;
 	
+
+	m_pDebug = m_pEntity->GetOrCreateComponent<Cry::DefaultComponents::CDebugDrawComponent>();
 	// Register the RemoteReviveOnClient function as a Remote Method Invocation (RMI) that can be executed by the server on clients
 	SRmi<RMI_WRAP(&CPlayerComponent::RemoteReviveOnClient)>::Register(this, eRAT_NoAttach, false, eNRT_ReliableOrdered);
 }
@@ -225,64 +227,81 @@ void CPlayerComponent::UpdateMovementRequest(float frameTime)
 
 	Vec3 velocity = ZERO;
 
-	const float moveSpeed = 20.5f;
+	const float moveSpeed = 40.5f;
 
-
+	const float rotSpeed = 5.2f * frameTime;
 	Ang3 ypr = CCamera::CreateAnglesYPR(Matrix33(m_lookOrientation));
+
 	ypr.y = 0;
 	ypr.z = 0;
+
+	float tmpX = ypr.x;
+
 	if(m_SpeedMultiplier < 2.f) m_SpeedMultiplier += frameTime * 2;
 	
 	if (m_inputFlags & EInputFlag::MoveForward)
 	{
 		if (m_inputFlags & EInputFlag::MoveLeft)
 		{
-			ypr.x = ypr.x + 0.8f;
+			tmpX = tmpX + 3.14f / 4;
 		}
 		if (m_inputFlags & EInputFlag::MoveRight)
 		{
-			ypr.x = ypr.x - 0.8f;
+			tmpX = tmpX - 3.14f / 4;
 		}
 	}
 	else if (m_inputFlags & EInputFlag::MoveBack)
 	{
 		if (m_inputFlags & EInputFlag::MoveLeft)
 		{
-			ypr.x = ypr.x - 0.8f;
+			tmpX = tmpX - 3.14f / 4;
 		}
 		if (m_inputFlags & EInputFlag::MoveRight)
 		{
-			ypr.x = ypr.x + 0.8f;
+			tmpX = tmpX + 3.14f / 4;
 		}
-		ypr.x = ypr.x - 3.2f;
+		tmpX = tmpX - 3.14f;
 	}
 	else if (m_inputFlags & EInputFlag::MoveLeft)
 	{
-		ypr.x = ypr.x + 1.6f;
+		tmpX = tmpX + 3.14f / 2;
+	
+
 	}
 	else if (m_inputFlags & EInputFlag::MoveRight)
 	{
-		ypr.x = ypr.x - 1.6f;
+		tmpX = tmpX - 3.14f / 2;
 	}
 	else m_SpeedMultiplier = 0.1f;
-	const float rotSpeed = 5.2f * frameTime;
-	gEnv->pLog->Log(("DELTA " + std::to_string(ypr.x - GetEntity()->GetRotation().GetRotZ())).c_str());
-	float delta = ypr.x - GetEntity()->GetRotation().GetRotZ();
-	if (delta > 3.3f) {
-		ypr.x = GetEntity()->GetRotation().GetRotZ() - rotSpeed;
-	}
-	else if (delta < -3.3f) {
-		ypr.x = GetEntity()->GetRotation().GetRotZ() + rotSpeed;
-	}
-	else {
-		ypr.x = CLAMP(ypr.x, GetEntity()->GetRotation().GetRotZ() - rotSpeed, GetEntity()->GetRotation().GetRotZ() + rotSpeed);
-	}
-	// ypr.x = CLAMP(ypr.x, GetEntity()->GetRotation().GetRotZ() - 0.07f, GetEntity()->GetRotation().GetRotZ() + 0.07f);
-	const Quat correctedOrientation = Quat(CCamera::CreateOrientationYPR(ypr));
 	
-	// Send updated transform to the entity, only orientation changes
+	float curX = GetEntity()->GetRotation().GetRotZ();
+	float delta = tmpX - curX;
+
+	if (delta > 3.14f) { // look right but turn left
+		ypr.x = curX - rotSpeed;
+	}
+	else if (delta < -3.14f) { // look left but turn right
+		ypr.x = curX + rotSpeed;
+	}
+	else { // look and turn both has positive or negative x
+		ypr.x = CLAMP(tmpX, curX - rotSpeed, curX + rotSpeed);
+	}
+
+	const Quat correctedOrientation = Quat(CCamera::CreateOrientationYPR(ypr));
+
+	m_pDebug->DrawText(ToString(ypr.x), 50.f, 50.f, 5.5f, Vec3(0.2f, 0.2f, .2f), 0.1f);
+	gEnv->pGameFramework->GetIPersistantDebug()->AddText(50.f, 350.f, 5.f, ColorF(Vec3(1, 1, 1)), 0.05f, ToString(delta));
+
 	if(m_inputFlags){
-		GetEntity()->SetPosRotScale(GetEntity()->GetWorldPos(), correctedOrientation, Vec3(1, 1, 1));
+		GetEntity()->SetRotation(correctedOrientation);
+
+		const bool isTurning = abs(delta) > 0.8f;
+		m_pAnimationComponent->SetTagWithId(m_rotateTagId, isTurning);
+
+		if (isTurning) {
+			m_pAnimationComponent->SetMotionParameter(eMotionParamID_TurnAngle, m_horizontalAngularVelocity * 1.0f);
+			m_SpeedMultiplier = 0.5f;
+		}
 		velocity.y += moveSpeed * frameTime * m_SpeedMultiplier;
 
 		m_pCharacterController->AddVelocity(GetEntity()->GetWorldRotation() * velocity);
@@ -323,20 +342,6 @@ void CPlayerComponent::UpdateLookDirectionRequest(float frameTime)
 
 void CPlayerComponent::UpdateAnimation(float frameTime)
 {
-	const float angularVelocityTurningThreshold = 0.174; // [rad/s]
-
-	// Update tags and motion parameters used for turning
-	const bool isTurning = std::abs(m_averagedHorizontalAngularVelocity.Get()) > angularVelocityTurningThreshold;
-	m_pAnimationComponent->SetTagWithId(m_rotateTagId, isTurning);
-	if (isTurning)
-	{
-		// TODO: This is a very rough predictive estimation of eMotionParamID_TurnAngle that could easily be replaced with accurate reactive motion 
-		// if we introduced IK look/aim setup to the character's model and decoupled entity's orientation from the look direction derived from mouse input.
-
-		const float turnDuration = 1.0f; // Expect the turning motion to take approximately one second.
-		m_pAnimationComponent->SetMotionParameter(eMotionParamID_TurnAngle, m_horizontalAngularVelocity * turnDuration);
-	}
-
 	// Update active fragment
 	const FragmentID& desiredFragmentId = m_pCharacterController->IsWalking() ? m_walkFragmentId : m_idleFragmentId;
 	if (m_activeFragmentId != desiredFragmentId)
@@ -344,38 +349,6 @@ void CPlayerComponent::UpdateAnimation(float frameTime)
 		m_activeFragmentId = desiredFragmentId;
 		m_pAnimationComponent->QueueFragmentWithId(m_activeFragmentId);
 	}
-	if (!m_pCharacterController->IsWalking()) return;
-	// Update entity rotation as the player turns
-	// We only want to affect Z-axis rotation, zero pitch and roll
-
-	Ang3 ypr = CCamera::CreateAnglesYPR(Matrix33(m_lookOrientation));
-	ypr.y = 0;
-	ypr.z = 0;
-
-	//gEnv->pLog->Log(("X ROT Z" + std::to_string(GetEntity()->GetRotation().GetRotZ())).c_str());
-	//gEnv->pLog->Log(("X ROT" + std::to_string(GetEntity()->GetRotation().GetColumn0().x * -1)).c_str());
-	//gEnv->pLog->Log(("YPR X" + std::to_string(ypr.x)).c_str());
-	//gEnv->pLog->Log(("NEXT X" + std::to_string(CLAMP(ypr.x, GetEntity()->GetRotation().GetColumn1().x * -1 - 0.1f, GetEntity()->GetRotation().GetColumn1().x * -1 + 0.1f))).c_str());
-	
-	gEnv->pLog->Log(("X ROT Z" + std::to_string(GetEntity()->GetRotation().GetRotZ())).c_str());
-	gEnv->pLog->Log(("X ROT" + std::to_string(GetEntity()->GetRotation().GetRotZ())).c_str());
-	gEnv->pLog->Log(("YPR X" + std::to_string(ypr.x)).c_str());
-	gEnv->pLog->Log(("NEXT X" + std::to_string(CLAMP(ypr.x, GetEntity()->GetRotation().GetRotZ() - 0.1f, GetEntity()->GetRotation().GetRotZ() + 0.1f))).c_str());
-	if ((ypr.x > 0 && GetEntity()->GetRotation().GetRotZ() > 0) || (ypr.x < 0 && GetEntity()->GetRotation().GetRotZ() < 0)) {
-		gEnv->pLog->Log(("WORK" + std::to_string(ypr.x)).c_str());
-		ypr.x = CLAMP(ypr.x, GetEntity()->GetRotation().GetRotZ() - 0.07f, GetEntity()->GetRotation().GetRotZ() + 0.07f);
-	}
-
-	/*const float delta =  ypr.x - GetEntity()->GetRotation().GetRotZ();
-	ypr.x = GetEntity()->GetRotation().GetRotZ() + delta / 10;*/
-	
-	
-	
-
-	const Quat correctedOrientation = Quat(CCamera::CreateOrientationYPR(ypr));
-
-	// Send updated transform to the entity, only orientation changes
-	//GetEntity()->SetPosRotScale(GetEntity()->GetWorldPos(), correctedOrientation, Vec3(1, 1, 1));
 }
 
 void CPlayerComponent::UpdateCamera(float frameTime)

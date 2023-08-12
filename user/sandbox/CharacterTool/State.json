@@ -16,14 +16,14 @@
 				"animation": {
 					"movement": "inplace",
 					"compressionPreview": "compressed",
-					"animationEventGizmos": true,
+					"animationEventGizmos": false,
 					"showTrail": true,
 					"showLocator": false,
 					"showDccToolOrigin": false
 				},
 				"showEdges": false,
 				"wireframe": false,
-				"fps": true,
+				"fps": false,
 				"skeleton": {
 					"jointFilter": "",
 					"showJoints": false,
@@ -31,7 +31,7 @@
 					"showJointNamesFontSize": 1.0,
 					"showSkeletonBoundingBox": false
 				},
-				"showViewportOrientation": true,
+				"showViewportOrientation": false,
 				"fov": 60.0,
 				"nearClip": 0.01,
 				"moveSpeed": 1.0,
@@ -42,7 +42,7 @@
 				"followJoint": {
 					"jointName": "",
 					"lockAlign": false,
-					"usePosition": true,
+					"usePosition": false,
 					"useRotation": false
 				},
 				"secondaryAnimation": {
@@ -69,18 +69,18 @@
 				"lighting": {
 					"cubemapName": "%ENGINE%/EngineAssets/Textures/default_probe_cm.dds",
 					"cubemapMultiplier": 3.0,
-					"cubemapColor": { "r": 255, "g": 255, "b": 255, "a": 255 },
+					"cubemapColor": { "r": 35, "g": 75, "b": 255, "a": 255 },
 					"rotatelight": false,
 					"lightMultiplier": 3.0,
 					"directionalLightColor": { "r": 255, "g": 255, "b": 255, "a": 255 }
 				},
 				"background": {
 					"useGradient": true,
-					"topColor": { "r": 128, "g": 128, "b": 128, "a": 255 },
-					"bottomColor": { "r": 32, "g": 32, "b": 32, "a": 255 }
+					"topColor": { "r": 21, "g": 128, "b": 55, "a": 255 },
+					"bottomColor": { "r": 182, "g": 60, "b": 29, "a": 255 }
 				}
 			},
-			"playbackTime": 0.21965
+			"playbackTime": 1.90813
 		}
 	},
 	"dockWidgetManager": {
@@ -90,7 +90,7 @@
 				"type": "ExplorerPanel",
 				"widget": {
 					"explorerRootIndex": 0,
-					"filterMode": false,
+					"filterMode": true,
 					"filterOptions": {
 						"Infolder": true,
 						"Inpak": true,
@@ -105,32 +105,15 @@
 						"expandedItems": [
 							"Characters",
 							"Skeletons",
-							"Animations (animations/motusanims/)",
+							"Animations",
 							"Compression (Animations/)",
 							"Compression (Animations/)|Compression Presets",
 							"Compression (Animations/)|DBA Table",
-							"Animations (animations/motusanims/)|bspace",
-							"Animations (animations/motusanims/)|ide2move",
-							"Animations (animations/motusanims/)|idle_3p",
-							"Animations (animations/motusanims/)|jog_bck_3p",
-							"Animations (animations/motusanims/)|jog_fwd_3p",
-							"Animations (animations/motusanims/)|run_fwd_3p",
-							"Animations (animations/motusanims/)|walk_bck_3p",
-							"Animations (animations/motusanims/)|walk_fwd_3p",
 							"Skeletons|Objects",
-							"Characters|Objects",
-							"Characters|Objects|Characters",
-							"Characters|Objects|Characters|SampleCharacter"
+							"Characters|Objects"
 						],
-						"selectedItems": [
-							"Animations (animations/motusanims/)|bspace|2DONE-BSpace_MoveStrafeRIFLE",
-							"Animations (animations/motusanims/)|bspace",
-							"Animations (animations/motusanims/)|bspace|29 KB",
-							"Animations (animations/motusanims/)|bspace|1",
-							"Animations (animations/motusanims/)|bspace",
-							"Animations (animations/motusanims/)|bspace"
-						],
-						"currentItem": "Animations (animations/motusanims/)|bspace|2DONE-BSpace_MoveStrafeRIFLE",
+						"selectedItems": [ ],
+						"currentItem": "",
 						"sectionsHidden": [ 1, 2, 3, 4, 5 ],
 						"sectionsVisible": [ 0 ]
 					}
@@ -140,20 +123,19 @@
 	},
 	"displayPanel": {
 		"propertyTree": {
-			"focusedRow": [ ],
-			"selection": [ ],
-			"expanded": [ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+			"focusedRow": [ 7, 0 ],
+			"selection": [ [ 7, 0 ] ],
+			"expanded": [
+				0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0,
+				0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0
+			]
 		}
 	},
-	"displayParameterSplittersWidths": [ 388, 359 ],
+	"displayParameterSplittersWidths": [ 254, 359 ],
 	"displayOptionsVisible": true,
 	"playbackPanel": { "timeUnits": "seconds" },
 	"propertiesPanel": {
-		"propertyTree": {
-			"focusedRow": [ 3, 1, 1 ],
-			"selection": [ ],
-			"expanded": [ 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1 ]
-		},
+		"propertyTree": { "focusedRow": [ ], "selection": [ ], "expanded": [ ] },
 		"outlineMode": "oneTree"
 	},
 	"blendSpacePreview": {
@@ -163,7 +145,7 @@
 				"t": { "x": -0.88123, "y": 2.19696, "z": 1.58522 }
 			}
 		},
-		"characterScale": 0.5,
+		"characterScale": 0.8466,
 		"showGrid": true
 	},
 	"animEventPresetPanel": {
@@ -179,18 +161,18 @@
 		3, 80
 	],
 	"windowState": [
-		0, 0, 0, 255, 0, 0, 0, 0, 253, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 1, 17, 0, 0, 2, 243, 252, 2, 0, 0, 0, 1, 251,
+		0, 0, 0, 255, 0, 0, 0, 0, 253, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 191, 0, 0, 2, 243, 252, 2, 0, 0, 0, 1, 251,
 		0, 0, 0, 30, 0, 69, 0, 120, 0, 112, 0, 108, 0, 111, 0, 114, 0, 101, 0, 114, 0, 80, 0, 97, 0, 110, 0, 101, 0, 108, 0, 45,
-		0, 48, 1, 0, 0, 0, 0, 0, 0, 2, 243, 0, 0, 0, 106, 0, 255, 255, 255, 0, 0, 0, 1, 0, 0, 2, 46, 0, 0, 2, 243, 252,
+		0, 48, 1, 0, 0, 0, 0, 0, 0, 2, 243, 0, 0, 0, 187, 0, 255, 255, 255, 0, 0, 0, 1, 0, 0, 3, 6, 0, 0, 2, 243, 252,
 		2, 0, 0, 0, 4, 251, 0, 0, 0, 32, 0, 115, 0, 99, 0, 101, 0, 110, 0, 101, 0, 95, 0, 112, 0, 97, 0, 114, 0, 97, 0, 109,
-		0, 101, 0, 116, 0, 101, 0, 114, 0, 115, 1, 0, 0, 0, 0, 0, 0, 0, 158, 0, 0, 0, 22, 0, 255, 255, 255, 251, 0, 0, 0, 20,
-		0, 112, 0, 114, 0, 111, 0, 112, 0, 101, 0, 114, 0, 116, 0, 105, 0, 101, 0, 115, 1, 0, 0, 0, 162, 0, 0, 2, 81, 0, 0, 0,
-		80, 0, 255, 255, 255, 251, 0, 0, 0, 38, 0, 98, 0, 108, 0, 101, 0, 110, 0, 100, 0, 95, 0, 115, 0, 112, 0, 97, 0, 99, 0, 101,
-		0, 95, 0, 112, 0, 114, 0, 101, 0, 118, 0, 105, 0, 101, 0, 119, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 222, 0, 255, 255,
+		0, 101, 0, 116, 0, 101, 0, 114, 0, 115, 1, 0, 0, 0, 0, 0, 0, 0, 126, 0, 0, 0, 22, 0, 255, 255, 255, 251, 0, 0, 0, 20,
+		0, 112, 0, 114, 0, 111, 0, 112, 0, 101, 0, 114, 0, 116, 0, 105, 0, 101, 0, 115, 1, 0, 0, 0, 130, 0, 0, 2, 113, 0, 0, 0,
+		50, 0, 255, 255, 255, 251, 0, 0, 0, 38, 0, 98, 0, 108, 0, 101, 0, 110, 0, 100, 0, 95, 0, 115, 0, 112, 0, 97, 0, 99, 0, 101,
+		0, 95, 0, 112, 0, 114, 0, 101, 0, 118, 0, 105, 0, 101, 0, 119, 0, 0, 0, 2, 21, 0, 0, 0, 222, 0, 0, 0, 222, 0, 255, 255,
 		255, 251, 0, 0, 0, 36, 0, 97, 0, 110, 0, 105, 0, 109, 0, 95, 0, 101, 0, 118, 0, 101, 0, 110, 0, 116, 0, 95, 0, 112, 0, 114,
-		0, 101, 0, 115, 0, 101, 0, 116, 0, 115, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 0, 76, 0, 255, 255, 255, 0, 0, 0, 3, 0,
+		0, 101, 0, 115, 0, 101, 0, 116, 0, 115, 0, 0, 0, 2, 99, 0, 0, 0, 144, 0, 0, 0, 76, 0, 255, 255, 255, 0, 0, 0, 3, 0,
 		0, 6, 54, 0, 0, 0, 90, 252, 1, 0, 0, 0, 1, 251, 0, 0, 0, 16, 0, 112, 0, 108, 0, 97, 0, 121, 0, 98, 0, 97, 0, 99,
-		0, 107, 1, 0, 0, 0, 0, 0, 0, 6, 54, 0, 0, 1, 168, 0, 255, 255, 255, 0, 0, 2, 239, 0, 0, 2, 243, 0, 0, 0, 4, 0,
+		0, 107, 1, 0, 0, 0, 0, 0, 0, 6, 54, 0, 0, 1, 168, 0, 255, 255, 255, 0, 0, 2, 105, 0, 0, 2, 243, 0, 0, 0, 4, 0,
 		0, 0, 4, 0, 0, 0, 8, 0, 0, 0, 8, 252, 0, 0, 0, 0
 	]
 }

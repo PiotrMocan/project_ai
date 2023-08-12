@@ -15,6 +15,7 @@
 #include <DefaultComponents/Geometry/AdvancedAnimationComponent.h>
 #include <DefaultComponents/Input/InputComponent.h>
 #include <DefaultComponents/Audio/ListenerComponent.h>
+#include <DefaultComponents/Debug/DebugDrawComponent.h>
 
 ////////////////////////////////////////////////////////
 // Represents a player participating in gameplay
@@ -155,6 +156,7 @@ protected:
 	Cry::DefaultComponents::CAdvancedAnimationComponent* m_pAnimationComponent = nullptr;
 	Cry::DefaultComponents::CInputComponent* m_pInputComponent = nullptr;
 	Cry::Audio::DefaultComponents::CListenerComponent* m_pAudioListenerComponent = nullptr;
+	Cry::DefaultComponents::CDebugDrawComponent* m_pDebug = nullptr;
 
 	FragmentID m_idleFragmentId;
 	FragmentID m_walkFragmentId;
