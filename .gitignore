@@ -11,3 +11,4 @@ solutions/win64/CMakeFiles/3.22.1/CompilerIdC/Debug/**
 solutions/win64/Debug/**
 solutions/win64/*.dir
 *.log
+*user*/**
