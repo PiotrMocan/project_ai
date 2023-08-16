@@ -55,7 +55,7 @@ void CPlayerComponent::Initialize()
 
 	// Mark the entity to be replicated over the network
 	m_pEntity->GetNetEntity()->BindToNetwork();
-	m_SpeedMultiplier = 0.7f;
+	m_SpeedMultiplier = 0.9f;
 	
 
 	m_pDebug = m_pEntity->GetOrCreateComponent<Cry::DefaultComponents::CDebugDrawComponent>();
@@ -237,65 +237,59 @@ void CPlayerComponent::UpdateMovementRequest(float frameTime)
 
 	float tmpX = ypr.x;
 
-	if(m_SpeedMultiplier < 2.f) m_SpeedMultiplier += frameTime * 2;
+	if(m_SpeedMultiplier < 1.5f) m_SpeedMultiplier += frameTime * 2;
 	
 	if (m_inputFlags & EInputFlag::MoveForward)
 	{
 		if (m_inputFlags & EInputFlag::MoveLeft)
 		{
-			tmpX = tmpX + 3.14f / 4;
+			tmpX = tmpX + gf_PI / 4;
 		}
 		if (m_inputFlags & EInputFlag::MoveRight)
 		{
-			tmpX = tmpX - 3.14f / 4;
+			tmpX = tmpX - gf_PI / 4;
 		}
 	}
 	else if (m_inputFlags & EInputFlag::MoveBack)
 	{
 		if (m_inputFlags & EInputFlag::MoveLeft)
 		{
-			tmpX = tmpX - 3.14f / 4;
+			tmpX = tmpX - gf_PI / 4;
 		}
 		if (m_inputFlags & EInputFlag::MoveRight)
 		{
-			tmpX = tmpX + 3.14f / 4;
+			tmpX = tmpX + gf_PI / 4;
 		}
-		tmpX = tmpX - 3.14f;
+		tmpX = tmpX - gf_PI;
 	}
 	else if (m_inputFlags & EInputFlag::MoveLeft)
 	{
-		tmpX = tmpX + 3.14f / 2;
+		tmpX = tmpX + gf_PI / 2;
 	
 
 	}
 	else if (m_inputFlags & EInputFlag::MoveRight)
 	{
-		tmpX = tmpX - 3.14f / 2;
+		tmpX = tmpX - gf_PI / 2;
 	}
-	else m_SpeedMultiplier = 0.1f;
+	else m_SpeedMultiplier = 0.9f;
 	
 	float curX = GetEntity()->GetRotation().GetRotZ();
-	float delta = tmpX - curX;
+	float delta = abs(crymath::wrap(tmpX, -gf_PI, gf_PI)) - abs(crymath::wrap(curX, -gf_PI, gf_PI));
 
-	if (delta > 3.14f) { // look right but turn left
-		ypr.x = curX - rotSpeed;
-	}
-	else if (delta < -3.14f) { // look left but turn right
-		ypr.x = curX + rotSpeed;
-	}
-	else { // look and turn both has positive or negative x
-		ypr.x = CLAMP(tmpX, curX - rotSpeed, curX + rotSpeed);
-	}
+	ypr.x = tmpX;
 
 	const Quat correctedOrientation = Quat(CCamera::CreateOrientationYPR(ypr));
+	correctedOrientation.CreateSlerp(GetEntity()->GetRotation(), GetEntity()->GetRotation(), 0.5f);
 
-	m_pDebug->DrawText(ToString(ypr.x), 50.f, 50.f, 5.5f, Vec3(0.2f, 0.2f, .2f), 0.1f);
-	gEnv->pGameFramework->GetIPersistantDebug()->AddText(50.f, 350.f, 5.f, ColorF(Vec3(1, 1, 1)), 0.05f, ToString(delta));
+
+	m_pDebug->DrawText(ToString(crymath::wrap(tmpX, -gf_PI, gf_PI)), 50.f, 50.f, 5.5f, Vec3(0.2f, 0.2f, .2f), 0.1f);
+	gEnv->pGameFramework->GetIPersistantDebug()->AddText(50.f, 350.f, 5.f, ColorF(Vec3(1, 1, 1)), 0.05f, ToString(abs(crymath::wrap(curX, -gf_PI, gf_PI))));
 
 	if(m_inputFlags){
-		GetEntity()->SetRotation(correctedOrientation);
+		GetEntity()->SetRotation(correctedOrientation.CreateSlerp(correctedOrientation, GetEntity()->GetRotation(), 0.92f));
 
-		const bool isTurning = abs(delta) > 0.8f;
+		const bool isTurning = abs(delta) > 0.9f;
 		m_pAnimationComponent->SetTagWithId(m_rotateTagId, isTurning);
 
 		if (isTurning) {
@@ -381,7 +375,7 @@ void CPlayerComponent::UpdateCamera(float frameTime)
 	Matrix34 localTransform = IDENTITY;
 	localTransform.SetRotation33(Matrix33(m_pEntity->GetWorldRotation().GetInverted()) * CCamera::CreateOrientationYPR(ypr));
 
-	const float viewDistance = 10.f;
+	const float viewDistance = 7.f;
 
 	// Offset the player along the forward axis (normally back)
 	// Also offset upwards
